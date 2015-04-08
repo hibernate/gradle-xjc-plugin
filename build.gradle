@@ -1,0 +1,74 @@
+repositories {
+	mavenCentral()
+}
+
+buildscript {
+	repositories {
+		mavenCentral()
+
+		maven {
+			name 'jboss-nexus'
+			url "http://repository.jboss.org/nexus/content/groups/public/"
+		}
+		maven {
+			name "jboss-snapshots"
+			url "http://snapshots.jboss.org/maven2/"
+		}
+	}
+	dependencies {
+		classpath 'org.hibernate.build.gradle:gradle-maven-publish-auth:2.0.1'
+	}
+}
+
+apply plugin: "groovy"
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+apply plugin: 'maven-publish-auth'
+
+dependencies {
+	compile gradleApi()
+	compile localGroovy()
+}
+
+buildDir = 'target'
+
+idea {
+    project {
+        jdkName = '1.6'
+        languageLevel = '1.6'
+
+        vcs = 'Git'
+    }
+    module {
+            downloadSources = true
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
+group = 'org.hibernate.build.gradle'
+version = '1.0-SNAPSHOT'
+
+publishing {
+	publications {
+		plugin(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			if ( version.endsWith( 'SNAPSHOT' ) ) {
+				name 'jboss-snapshots-repository'
+				url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
+			}
+			else {
+				name 'jboss-releases-repository'
+				url 'https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/'
+			}
+		}
+	}
+}
+
