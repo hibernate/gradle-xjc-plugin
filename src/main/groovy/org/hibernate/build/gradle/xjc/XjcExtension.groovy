@@ -9,6 +9,8 @@ import org.gradle.api.Project
 class XjcExtension {
 	final Project project
 
+	boolean xjcConfigurationSupplementsDefaultDependencies = true
+
 //	String xjcTaskName = 'com.sun.tools.xjc.XJCTask'
 	String xjcTaskName = 'org.jvnet.jaxb2_commons.xjc.XJC2Task'
 
