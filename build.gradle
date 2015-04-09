@@ -30,6 +30,8 @@ dependencies {
 	compile localGroovy()
 }
 
+group = 'org.hibernate.build.gradle'
+version = '1.0.0.Final'
 buildDir = 'target'
 
 idea {
@@ -44,17 +46,54 @@ idea {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
-}
-
-group = 'org.hibernate.build.gradle'
-version = '1.0-SNAPSHOT'
-
 publishing {
 	publications {
 		plugin(MavenPublication) {
 			from components.java
+
+			artifact sourcesJar {
+				classifier "sources"
+			}
+
+			pom.withXml {
+				// append additional metadata
+				asNode().children().last() + {
+					resolveStrategy = Closure.DELEGATE_FIRST
+
+					name 'Gradle plugin for XJC integration'
+					description 'Integrates JAXB XJC functionality into a Gradle build'
+
+					url 'https://github.com/sebersole/gradle-xjc-plugin'
+
+					issueManagement {
+						system 'github'
+						url 'https://github.com/sebersole/gradle-xjc-plugin/issues'
+					}
+
+					scm {
+						url 'https://github.com/sebersole/gradle-xjc-plugin'
+						connection 'scm:git:https://github.com/sebersole/gradle-xjc-plugin.git'
+						developerConnection 'scm:git:git@github.com:sebersole/gradle-xjc-plugin.git'
+					}
+
+					licenses {
+						license {
+							name 'Apache License, Version 2.0'
+							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+							distribution 'repo'
+						}
+					}
+
+					developers {
+						developer {
+							id 'sebersole'
+							name 'Steve Ebersole'
+							organization 'Hibernate.org'
+							organizationUrl 'http://hibernate.org'
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -72,3 +111,11 @@ publishing {
 	}
 }
 
+task sourcesJar(type: Jar, dependsOn: compileJava) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.2'
+}
