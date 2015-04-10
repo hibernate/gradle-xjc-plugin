@@ -56,30 +56,22 @@ class XjcPlugin implements Plugin<Project> {
 						xjcTask.doLast {
 							extension.outputDir.mkdirs()
 
-							project.ant.taskdef(name: 'xjc', classname: extension.xjcTaskName, classpath: configuration.asPath)
+							evaluatedProject.ant.taskdef(name: 'xjc', classname: extension.xjcTaskName, classpath: configuration.asPath)
 
-							extension.schemas.all{ SchemaDescriptor descriptor->
-								if ( descriptor.xjcExtensions.empty ) {
-									project.ant.xjc(
-											destdir: extension.outputDir,
-											binding: descriptor.xjcBinding,
-											schema: descriptor.xsd,
-											target: descriptor.jaxbVersion
-									)
-								}
-								else {
-									project.ant.xjc(
-											destdir: extension.outputDir,
-											binding: descriptor.xjcBinding,
-											schema: descriptor.xsd,
-											target: descriptor.jaxbVersion,
-											extension: 'true') {
-										arg line: descriptor.xjcExtensions.collect{ "-X${it}" }.join( " " )
+							extension.schemas.all { SchemaDescriptor descriptor ->
+								evaluatedProject.ant.xjc(
+										destdir: extension.outputDir,
+										binding: descriptor.xjcBinding,
+										schema: descriptor.xsd,
+										target: descriptor.jaxbVersion,
+										packageName: descriptor.packageName,
+										extension: 'true') {
+									if ( descriptor.xjcExtensions.empty ) {
+										arg line: descriptor.xjcExtensions.collect { "-X${it}" }.join( " " )
 									}
 								}
 							}
 						}
-
 					}
 				}
 		)
