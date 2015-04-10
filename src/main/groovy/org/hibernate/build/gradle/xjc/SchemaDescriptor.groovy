@@ -11,7 +11,6 @@ class SchemaDescriptor {
 
 	File xsd;
 	File xjcBinding;
-	String packageName
 
 	String jaxbVersion = '2.0'
 

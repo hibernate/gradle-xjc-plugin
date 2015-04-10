@@ -31,7 +31,7 @@ dependencies {
 }
 
 group = 'org.hibernate.build.gradle'
-version = '1.0.2-SNAPSHOT'
+version = '1.0.2.Final'
 buildDir = 'target'
 
 idea {

@@ -28,12 +28,8 @@ class XjcPlugin implements Plugin<Project> {
 		Task xjcTask = project.tasks.maybeCreate( "xjc" )
 		xjcTask.group = 'sourceGeneration'
 		xjcTask.description = 'Executes XJC for generation of a JAXB binding model for a XSD.'
-		// initially we create it as disabled.  We will enable it later after we know we have
-		// some SchemaDescriptors to process
-		xjcTask.enabled = false
 
 		SourceSet mainSourceSet = project.convention.getPlugin( JavaPluginConvention ).sourceSets.findByName( "main" );
-		mainSourceSet.java.srcDir( extension.outputDir )
 		project.tasks.findByName( mainSourceSet.compileJavaTaskName ).dependsOn xjcTask
 
 		prepareDefaults( project, extension, configuration )
@@ -43,10 +39,11 @@ class XjcPlugin implements Plugin<Project> {
 					@Override
 					void execute(Project evaluatedProject) {
 						if ( extension.schemas.empty ) {
+							xjcTask.enabled = false
 							return;
 						}
 
-						xjcTask.enabled = true
+						mainSourceSet.java.srcDir( extension.outputDir )
 
 						xjcTask.outputs.file( extension.outputDir )
 
@@ -64,9 +61,8 @@ class XjcPlugin implements Plugin<Project> {
 										binding: descriptor.xjcBinding,
 										schema: descriptor.xsd,
 										target: descriptor.jaxbVersion,
-										packageName: descriptor.packageName,
 										extension: 'true') {
-									if ( descriptor.xjcExtensions.empty ) {
+									if ( !descriptor.xjcExtensions.empty ) {
 										arg line: descriptor.xjcExtensions.collect { "-X${it}" }.join( " " )
 									}
 								}
