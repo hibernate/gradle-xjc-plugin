@@ -62,6 +62,7 @@ class XjcPlugin implements Plugin<Project> {
 										schema: descriptor.xsd,
 										target: descriptor.jaxbVersion,
 										extension: 'true') {
+									arg line: "-npa "
 									if ( !descriptor.xjcExtensions.empty ) {
 										arg line: descriptor.xjcExtensions.collect { "-X${it}" }.join( " " )
 									}
