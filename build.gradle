@@ -46,6 +46,11 @@ idea {
     }
 }
 
+task sourcesJar(type: Jar, dependsOn: compileJava) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
 publishing {
 	publications {
 		plugin(MavenPublication) {
@@ -109,13 +114,4 @@ publishing {
 			}
 		}
 	}
-}
-
-task sourcesJar(type: Jar, dependsOn: compileJava) {
-	from sourceSets.main.allSource
-	classifier = 'sources'
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.2'
 }
