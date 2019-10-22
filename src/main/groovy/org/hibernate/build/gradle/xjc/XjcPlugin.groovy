@@ -45,7 +45,7 @@ class XjcPlugin implements Plugin<Project> {
 
 						mainSourceSet.java.srcDir( extension.outputDir )
 
-						xjcTask.outputs.file( extension.outputDir )
+						xjcTask.outputs.dir( extension.outputDir )
 
 						xjcTask.inputs.files( extension.schemas*.xsd )
 						xjcTask.inputs.files( extension.schemas*.xjcBinding )
