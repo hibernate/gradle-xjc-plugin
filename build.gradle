@@ -48,7 +48,7 @@ idea {
 
 task sourcesJar(type: Jar, dependsOn: compileJava) {
 	from sourceSets.main.allSource
-	classifier = 'sources'
+	archiveClassifier.set('sources')
 }
 
 publishing {
