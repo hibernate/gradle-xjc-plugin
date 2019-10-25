@@ -8,11 +8,11 @@ buildscript {
 
 		maven {
 			name 'jboss-nexus'
-			url "http://repository.jboss.org/nexus/content/groups/public/"
+			url "https://repository.jboss.org/nexus/content/groups/public/"
 		}
 		maven {
 			name "jboss-snapshots"
-			url "http://snapshots.jboss.org/maven2/"
+			url "https://snapshots.jboss.org/maven2/"
 		}
 	}
 	dependencies {
@@ -84,7 +84,7 @@ publishing {
 					licenses {
 						license {
 							name 'Apache License, Version 2.0'
-							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+							url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
 							distribution 'repo'
 						}
 					}
@@ -94,7 +94,7 @@ publishing {
 							id 'sebersole'
 							name 'Steve Ebersole'
 							organization 'Hibernate.org'
-							organizationUrl 'http://hibernate.org'
+							organizationUrl 'https://hibernate.org'
 						}
 					}
 				}
