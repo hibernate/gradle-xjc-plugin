@@ -8,11 +8,11 @@ buildscript {
 
 		maven {
 			name 'jboss-nexus'
-			url "https://repository.jboss.org/nexus/content/groups/public/"
+			url 'https://repository.jboss.org/nexus/content/groups/public/'
 		}
 		maven {
-			name "jboss-snapshots"
-			url "https://snapshots.jboss.org/maven2/"
+			name 'jboss-snapshots'
+			url 'https://snapshots.jboss.org/maven2/'
 		}
 	}
 	dependencies {
@@ -20,7 +20,7 @@ buildscript {
 	}
 }
 
-apply plugin: "groovy"
+apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'maven-publish-auth'
