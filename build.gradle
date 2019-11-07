@@ -1,7 +1,7 @@
 plugins {
 	id 'groovy'
-	id 'maven-publish'
-	id 'org.hibernate.build.maven-repo-auth' version '3.0.0'
+	id 'java-gradle-plugin'
+	id "com.gradle.plugin-publish" version "0.9.10"
 }
 
 group = 'org.hibernate.build.gradle'
@@ -18,75 +18,31 @@ dependencies {
 
 buildDir = 'target'
 
-task sourcesJar(type: Jar, dependsOn: compileJava) {
-	from sourceSets.main.allSource
-	archiveClassifier.set('sources')
-}
-
-publishing {
-	publications {
-		plugin(MavenPublication) {
-			from components.java
-
-			artifact sourcesJar {
-				classifier "sources"
-			}
-
-			pom.withXml {
-				// append additional metadata
-				asNode().children().last() + {
-					resolveStrategy = Closure.DELEGATE_FIRST
-
-					name 'Gradle plugin for XJC integration'
-					description 'Integrates JAXB XJC functionality into a Gradle build'
-
-					url 'https://github.com/sebersole/gradle-xjc-plugin'
-
-					issueManagement {
-						system 'github'
-						url 'https://github.com/sebersole/gradle-xjc-plugin/issues'
-					}
-
-					scm {
-						url 'https://github.com/sebersole/gradle-xjc-plugin'
-						connection 'scm:git:https://github.com/sebersole/gradle-xjc-plugin.git'
-						developerConnection 'scm:git:git@github.com:sebersole/gradle-xjc-plugin.git'
-					}
-
-					licenses {
-						license {
-							name 'Apache License, Version 2.0'
-							url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-							distribution 'repo'
-						}
-					}
-
-					developers {
-						developer {
-							id 'sebersole'
-							name 'Steve Ebersole'
-							organization 'Hibernate.org'
-							organizationUrl 'https://hibernate.org'
-						}
-					}
-				}
-			}
-		}
-	}
-
-	repositories {
-		maven {
-			if ( version.endsWith( 'SNAPSHOT' ) ) {
-				name 'jboss-snapshots-repository'
-				url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
-			}
-			else {
-				name 'jboss-releases-repository'
-				url 'https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/'
-			}
+gradlePlugin {
+	plugins {
+		profilesPlugin {
+			id = 'org.hibernate.build.xjc'
+			implementationClass = 'org.hibernate.build.gradle.xjc.XjcPlugin'
 		}
 	}
 }
+
+pluginBundle {
+	website = 'https://github.com/sebersole/gradle-maven-publish-auth'
+	vcsUrl = 'https://github.com/sebersole/gradle-maven-publish-auth'
+	tags = ['jaxb','xjc']
+
+	plugins {
+		profilesPlugin {
+			id = 'org.hibernate.build.xjc'
+			displayName = 'JAXB binding model generation using the XJC tool'
+			description = 'JAXB binding model generation using the XJC tool'
+		}
+	}
+}
+
+task compile
+tasks.compile.dependsOn tasks.compileJava, tasks.compileTestJava
 
 wrapper {
 	// To upgrade the version of gradle used in the wrapper, run:
