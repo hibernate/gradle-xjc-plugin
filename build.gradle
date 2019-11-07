@@ -1,50 +1,22 @@
+plugins {
+	id 'groovy'
+	id 'maven-publish'
+	id 'org.hibernate.build.maven-repo-auth' version '3.0.0'
+}
+
+group = 'org.hibernate.build.gradle'
+version = '2.0.0-SNAPSHOT'
+
 repositories {
 	mavenCentral()
 }
-
-buildscript {
-	repositories {
-		mavenCentral()
-
-		maven {
-			name 'jboss-nexus'
-			url 'https://repository.jboss.org/nexus/content/groups/public/'
-		}
-		maven {
-			name 'jboss-snapshots'
-			url 'https://snapshots.jboss.org/maven2/'
-		}
-	}
-	dependencies {
-		classpath 'org.hibernate.build.gradle:gradle-maven-publish-auth:3.0.0'
-	}
-}
-
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'maven-publish'
-apply plugin: 'maven-publish-auth'
 
 dependencies {
 	compile gradleApi()
 	compile localGroovy()
 }
 
-group = 'org.hibernate.build.gradle'
-version = '2.0.0-SNAPSHOT'
 buildDir = 'target'
-
-idea {
-    project {
-        jdkName = '1.6'
-        languageLevel = '1.6'
-
-        vcs = 'Git'
-    }
-    module {
-            downloadSources = true
-    }
-}
 
 task sourcesJar(type: Jar, dependsOn: compileJava) {
 	from sourceSets.main.allSource
