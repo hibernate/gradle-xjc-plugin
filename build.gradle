@@ -1,11 +1,11 @@
 plugins {
 	id 'groovy'
 	id 'java-gradle-plugin'
-	id "com.gradle.plugin-publish" version "0.9.10"
+	id 'com.gradle.plugin-publish' version '0.11.0'
 }
 
 group = 'org.hibernate.build.gradle'
-version = '2.0.0-SNAPSHOT'
+version = '2.0.0'
 
 repositories {
 	mavenCentral()
@@ -20,7 +20,7 @@ buildDir = 'target'
 
 gradlePlugin {
 	plugins {
-		profilesPlugin {
+		xjcPlugin {
 			id = 'org.hibernate.build.xjc'
 			implementationClass = 'org.hibernate.build.gradle.xjc.XjcPlugin'
 		}
@@ -28,12 +28,12 @@ gradlePlugin {
 }
 
 pluginBundle {
-	website = 'https://github.com/sebersole/gradle-maven-publish-auth'
-	vcsUrl = 'https://github.com/sebersole/gradle-maven-publish-auth'
+	website = 'https://github.com/sebersole/gradle-xjc-plugin'
+	vcsUrl = 'https://github.com/sebersole/gradle-xjc-plugin'
 	tags = ['jaxb','xjc']
 
 	plugins {
-		profilesPlugin {
+		xjcPlugin {
 			id = 'org.hibernate.build.xjc'
 			displayName = 'JAXB binding model generation using the XJC tool'
 			description = 'JAXB binding model generation using the XJC tool'

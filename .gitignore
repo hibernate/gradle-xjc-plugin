@@ -1,5 +1,6 @@
 .gradle
 target/
+build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -21,3 +22,4 @@ atlassian-ide-plugin.xml
 .settings
 .metadata
 bin
+
