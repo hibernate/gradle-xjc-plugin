@@ -28,8 +28,8 @@ gradlePlugin {
 }
 
 pluginBundle {
-	website = 'https://github.com/sebersole/gradle-maven-publish-auth'
-	vcsUrl = 'https://github.com/sebersole/gradle-maven-publish-auth'
+	website = 'https://github.com/sebersole/gradle-xjc-plugin'
+	vcsUrl = 'https://github.com/sebersole/gradle-xjc-plugin'
 	tags = ['jaxb','xjc']
 
 	plugins {
