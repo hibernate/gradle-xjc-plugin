@@ -27,13 +27,6 @@ ext {
 	//noinspection GrUnresolvedAccess
 	publishSecret = credentials.'hibernate.gradle.publish.secret'
 
-	if ( ext.publishKey == null ) {
-		throw new RuntimeException( "`hibernate.gradle.publish.key` not found" )
-	}
-	if ( ext.publishSecret == null ) {
-		throw new RuntimeException( "`hibernate.gradle.publish.secret` not found" )
-	}
-
 	project.setProperty( 'gradle.publish.key', ext.publishKey )
 	project.setProperty( 'gradle.publish.secret', ext.publishSecret )
 }
@@ -55,7 +48,7 @@ buildDir = 'target'
 gradlePlugin {
 	plugins {
 		xjcPlugin {
-			id = ext.pluginId
+			id = project.pluginId
 			implementationClass = 'org.hibernate.build.gradle.xjc.XjcPlugin'
 		}
 	}
@@ -68,9 +61,24 @@ pluginBundle {
 
 	plugins {
 		xjcPlugin {
-			id = ext.pluginId
+			id = project.pluginId
 			displayName = 'JAXB binding model generation using the XJC tool'
 			description = 'JAXB binding model generation using the XJC tool'
+		}
+	}
+}
+
+if ( version.toString().endsWith( '-SNAPSHOT' ) ) {
+	tasks.publishPlugins.enabled = false
+}
+
+tasks.publishPlugins {
+	doFirst {
+		if ( project.publishKey == null ) {
+			throw new RuntimeException( "`hibernate.gradle.publish.key` not found" )
+		}
+		if ( project.publishKey == null ) {
+			throw new RuntimeException( "`hibernate.gradle.publish.secret` not found" )
 		}
 	}
 }
