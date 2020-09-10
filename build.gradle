@@ -1,16 +1,46 @@
 plugins {
 	id 'groovy'
 	id 'java-gradle-plugin'
+
+	// for publishing to the plugin portal
 	id 'com.gradle.plugin-publish' version '0.11.0'
+	id "nu.studer.credentials" version "2.1"
+
+	// for publishing snapshots
+	id 'maven-publish'
+	id 'org.hibernate.build.maven-repo-auth' version '3.0.3'
+
+	id 'idea'
+	id 'eclipse'
 }
 
 repositories {
 	mavenCentral()
 }
 
+ext {
+	pluginId = 'org.hibernate.build.xjc'
+	pluginVersion = '2.0.2-SNAPSHOT'
+
+	//noinspection GrUnresolvedAccess
+	publishKey = credentials.'hibernate.gradle.publish.key'
+	//noinspection GrUnresolvedAccess
+	publishSecret = credentials.'hibernate.gradle.publish.secret'
+
+	if ( ext.publishKey == null ) {
+		throw new RuntimeException( "`hibernate.gradle.publish.key` not found" )
+	}
+	if ( ext.publishSecret == null ) {
+		throw new RuntimeException( "`hibernate.gradle.publish.secret` not found" )
+	}
+
+	project.setProperty( 'gradle.publish.key', ext.publishKey )
+	project.setProperty( 'gradle.publish.secret', ext.publishSecret )
+}
+
 
 group = 'org.hibernate.build.gradle'
-version = '2.0.2-SNAPSHOT'
+version = ext.pluginVersion
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -25,20 +55,20 @@ buildDir = 'target'
 gradlePlugin {
 	plugins {
 		xjcPlugin {
-			id = 'org.hibernate.build.xjc'
+			id = ext.pluginId
 			implementationClass = 'org.hibernate.build.gradle.xjc.XjcPlugin'
 		}
 	}
 }
 
 pluginBundle {
-	website = 'https://github.com/sebersole/gradle-xjc-plugin'
-	vcsUrl = 'https://github.com/sebersole/gradle-xjc-plugin'
+	website = 'https://github.com/hibernate/gradle-xjc-plugin'
+	vcsUrl = 'https://github.com/hibernate/gradle-xjc-plugin'
 	tags = ['jaxb','xjc']
 
 	plugins {
 		xjcPlugin {
-			id = 'org.hibernate.build.xjc'
+			id = ext.pluginId
 			displayName = 'JAXB binding model generation using the XJC tool'
 			description = 'JAXB binding model generation using the XJC tool'
 		}
