@@ -2,7 +2,7 @@ plugins {
 	id 'groovy'
 	id 'java-gradle-plugin'
 
-	//id "com.github.sebersole.testkit-junit5" version "1.3.0"
+//	id "com.github.sebersole.testkit-junit5" version "1.3.0"
 
 	// for publishing to the plugin portal
 	id 'com.gradle.plugin-publish' version '0.11.0'
@@ -36,6 +36,10 @@ targetCompatibility = 1.8
 dependencies {
 	implementation gradleApi()
 	implementation localGroovy()
+
+	testImplementation gradleApi()
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.1"
+	testImplementation "org.junit.jupiter:junit-jupiter-engine:5.7.1"
 }
 
 buildDir = 'target'
@@ -85,4 +89,8 @@ wrapper {
 	// To upgrade the version of gradle used in the wrapper, run:
 	//     ./gradlew wrapper --gradle-version NEW_VERSION
 	distributionType = Wrapper.DistributionType.ALL
+}
+
+tasks.test {
+	useJUnitPlatform()
 }

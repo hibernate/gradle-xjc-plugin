@@ -1,13 +1,18 @@
 package org.hibernate.build.gradle.xjc
 
+import javax.inject.Inject
+
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 
@@ -15,10 +20,12 @@ import org.gradle.api.tasks.TaskAction
 /**
  * @author Steve Ebersole
  */
+@CacheableTask
 class XjcTask extends DefaultTask {
     private final SchemaDescriptor schemaDescriptor
     private final DirectoryProperty outputDirectory
 
+    @Inject
     XjcTask(SchemaDescriptor schemaDescriptor, XjcExtension xjcExtension, Project project) {
         this.schemaDescriptor = schemaDescriptor
 
@@ -35,11 +42,13 @@ class XjcTask extends DefaultTask {
     }
 
     @InputFile
+    @PathSensitive( PathSensitivity.RELATIVE )
     RegularFileProperty getXsdFile() {
         return schemaDescriptor.getXsdFile()
     }
 
     @InputFile
+    @PathSensitive( PathSensitivity.RELATIVE )
     RegularFileProperty getXjcBindingFile() {
         return schemaDescriptor.getXjcBindingFile()
     }
@@ -62,7 +71,8 @@ class XjcTask extends DefaultTask {
                 schema: schemaDescriptor.xsdFile.get().asFile.absolutePath,
                 target: schemaDescriptor.jaxbVersion,
                 extension: 'true') {
-            arg line: "-npa "
+            arg line: '-no-header'
+            arg line: '-npa'
             if ( !schemaDescriptor.xjcExtensions.empty ) {
                 arg line: schemaDescriptor.xjcExtensions.collect { "-X${it}" }.join( " " )
             }
