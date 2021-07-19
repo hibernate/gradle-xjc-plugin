@@ -16,6 +16,7 @@ import org.gradle.api.tasks.InputFile;
 @SuppressWarnings("UnstableApiUsage")
 public class SchemaDescriptor implements Named {
 	private final String name;
+	private final Project project;
 
 	private final RegularFileProperty xsdFile;
 	private final RegularFileProperty xjcBindingFile;
@@ -25,6 +26,7 @@ public class SchemaDescriptor implements Named {
 
 	public SchemaDescriptor(String name, Project project) {
 		this.name = name;
+		this.project = project;
 
 		xsdFile = project.getObjects().fileProperty();
 		xjcBindingFile = project.getObjects().fileProperty();
@@ -47,9 +49,25 @@ public class SchemaDescriptor implements Named {
 		return xsdFile;
 	}
 
+	public void setXsdFile(Object reference) {
+		xsdFile.set( project.file( reference ) );
+	}
+
+	public void xsdFile(Object reference) {
+		setXsdFile( reference );
+	}
+
 	@InputFile
 	public RegularFileProperty getXjcBindingFile() {
 		return xjcBindingFile;
+	}
+
+	public void setXjcBindingFile(Object reference) {
+		xjcBindingFile.set( project.file( reference ) );
+	}
+
+	public void xjcBindingFile(Object reference) {
+		setXjcBindingFile( reference );
 	}
 
 	@Input
