@@ -31,14 +31,6 @@ class XjcTask extends DefaultTask {
 
         outputDirectory = project.getObjects().directoryProperty()
         outputDirectory.convention( xjcExtension.getOutputDirectory().dir( schemaDescriptor.getName() ) )
-
-        final SourceSet mainSourceSet = project.getConvention()
-                .getPlugin( JavaPluginConvention.class )
-                .getSourceSets()
-                .findByName( SourceSet.MAIN_SOURCE_SET_NAME )
-
-        project.tasks.xjc.dependsOn( this )
-        mainSourceSet.getJava().srcDir( outputDirectory )
     }
 
     @InputFile
