@@ -46,6 +46,9 @@ class XjcPlugin implements Plugin<Project> {
 		project.getTasks().findByName( mainSourceSet.getCompileJavaTaskName() ).dependsOn( xjcTask )
 
 		project.ant.saveStreams = false
-		project.ant.taskdef(name: 'xjc', classname: ANT_TASK_IMPL, classpath: project.configurations.xjc.asPath)
+
+		project.afterEvaluate {
+			project.ant.taskdef(name: 'xjc', classname: ANT_TASK_IMPL, classpath: project.configurations.xjc.asPath)
+		}
 	}
 }

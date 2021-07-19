@@ -18,7 +18,7 @@ repositories {
 
 ext {
 	pluginId = 'org.hibernate.build.xjc'
-	pluginVersion = '2.1.3-SNAPSHOT'
+	pluginVersion = '2.1.3'
 
 	//noinspection GrUnresolvedAccess
 	project.setProperty( 'gradle.publish.key', credentials.hibernatePluginPortalUsername )
@@ -33,6 +33,8 @@ version = ext.pluginVersion
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+buildDir = 'target'
+
 dependencies {
 	implementation gradleApi()
 	implementation localGroovy()
@@ -42,7 +44,6 @@ dependencies {
 	testImplementation "org.junit.jupiter:junit-jupiter-engine:5.7.1"
 }
 
-buildDir = 'target'
 
 gradlePlugin {
 	plugins {
