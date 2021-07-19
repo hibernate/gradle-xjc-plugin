@@ -74,8 +74,12 @@ abstract class XjcTask extends DefaultTask {
                 extension: 'true') {
             arg line: '-no-header'
             arg line: '-npa'
-            if ( !xjcExtensions.empty ) {
-                arg line: xjcExtensions.collect { "-X${it}" }.join( " " )
+
+            if ( ! xjcExtensions.empty ) {
+                def extensionsToEnable = xjcExtensions.get()
+                if ( ! extensionsToEnable.empty ) {
+                    arg line: extensionsToEnable.collect { "-X${it}" }.join( " " )
+                }
             }
         }
     }
