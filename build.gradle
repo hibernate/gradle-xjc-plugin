@@ -18,7 +18,7 @@ repositories {
 
 ext {
 	pluginId = 'org.hibernate.build.xjc'
-	pluginVersion = '2.1.6'
+	pluginVersion = '2.1.7-SNAPSHOT'
 
 	//noinspection GrUnresolvedAccess
 	project.setProperty( 'gradle.publish.key', credentials.hibernatePluginPortalUsername )
