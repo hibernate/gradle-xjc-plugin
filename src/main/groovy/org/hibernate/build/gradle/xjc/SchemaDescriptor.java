@@ -1,11 +1,13 @@
 package org.hibernate.build.gradle.xjc;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.gradle.api.Named;
 import org.gradle.api.Project;
 import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 
@@ -19,7 +21,7 @@ public class SchemaDescriptor implements Named {
 
 	private final RegularFileProperty xsdFile;
 	private final RegularFileProperty xjcBindingFile;
-	private Set<String> xjcExtensions = new HashSet<>();
+	private SetProperty<String> xjcExtensions;
 
 	public SchemaDescriptor(String name, Project project) {
 		this.name = name;
@@ -27,6 +29,7 @@ public class SchemaDescriptor implements Named {
 
 		xsdFile = project.getObjects().fileProperty();
 		xjcBindingFile = project.getObjects().fileProperty();
+		xjcExtensions = project.getObjects().setProperty( String.class );
 	}
 
 	@Override
@@ -61,11 +64,23 @@ public class SchemaDescriptor implements Named {
 	}
 
 	@Input
-	public Set<String> getXjcExtensions() {
+	public SetProperty<String> ___xjcExtensions() {
 		return xjcExtensions;
 	}
 
+	public Set<String> getXjcExtensions() {
+		return xjcExtensions.get();
+	}
+
 	public void setXjcExtensions(Set<String> xjcExtensions) {
-		this.xjcExtensions = xjcExtensions;
+		this.xjcExtensions.set( xjcExtensions );
+	}
+
+	public void setXjcExtensions(String... xjcExtensions) {
+		xjcExtensions( xjcExtensions );
+	}
+
+	public void xjcExtensions(String... xjcExtensions) {
+		setXjcExtensions( new HashSet<>( Arrays.asList( xjcExtensions) ) );
 	}
 }

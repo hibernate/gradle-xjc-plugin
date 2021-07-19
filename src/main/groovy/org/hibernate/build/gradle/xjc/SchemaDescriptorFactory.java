@@ -28,9 +28,8 @@ public class SchemaDescriptorFactory implements NamedDomainObjectFactory<SchemaD
 		final XjcTask xjcTask = project.getTasks().create( determineXjcTaskName( schemaDescriptor ), XjcTask.class );
 		xjcTask.getXsdFile().set( schemaDescriptor.getXsdFile() );
 		xjcTask.getXjcBindingFile().set( schemaDescriptor.getXjcBindingFile() );
-		xjcTask.getXjcExtensions().set( schemaDescriptor.getXjcExtensions() );
+		xjcTask.getXjcExtensions().set( schemaDescriptor.___xjcExtensions() );
 		xjcTask.getOutputDirectory().convention( xjcExtension.getOutputDirectory().dir( name ) );
-		xjcTask.getJaxbVersion().set( xjcExtension.getJaxbVersion() );
 
 		final SourceSet mainSourceSet = project.getConvention()
 				.getPlugin( JavaPluginConvention.class )

@@ -1,10 +1,8 @@
 package org.hibernate.build.gradle.xjc
 
-
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
@@ -25,16 +23,12 @@ abstract class XjcTask extends DefaultTask {
     private final RegularFileProperty xjcBindingFile
     private final SetProperty<String> xjcExtensions
 
-    private final Property<String> jaxbVersion
-
     XjcTask() {
         xsdFile = project.getObjects().fileProperty()
         xjcBindingFile = project.getObjects().fileProperty()
         xjcExtensions = project.objects.setProperty( String.class )
 
         outputDirectory = project.objects.directoryProperty()
-
-        jaxbVersion = project.objects.property( String.class )
     }
 
     @InputFile
@@ -54,11 +48,6 @@ abstract class XjcTask extends DefaultTask {
         return xjcExtensions
     }
 
-    @Input
-    Property<String> getJaxbVersion() {
-        return jaxbVersion
-    }
-
     @OutputDirectory
     DirectoryProperty getOutputDirectory() {
         return outputDirectory
@@ -70,15 +59,15 @@ abstract class XjcTask extends DefaultTask {
                 destdir: outputDirectory.get().asFile.absolutePath,
                 binding: xjcBindingFile.get().asFile.absolutePath,
                 schema: xsdFile.get().asFile.absolutePath,
-                target: jaxbVersion,
                 extension: 'true') {
-            arg line: '-no-header'
-            arg line: '-npa'
+            project.ant.arg line: '-no-header'
+            project.ant.arg line: '-npa'
 
-            if ( ! xjcExtensions.empty ) {
+            if ( xjcExtensions.isPresent() ) {
                 def extensionsToEnable = xjcExtensions.get()
-                if ( ! extensionsToEnable.empty ) {
-                    arg line: extensionsToEnable.collect { "-X${it}" }.join( " " )
+                if ( ! extensionsToEnable.isEmpty() ) {
+                    def extensionsSwitches = extensionsToEnable.collect { "-X${it}" }.join( " " )
+                    project.ant.arg line: extensionsSwitches
                 }
             }
         }

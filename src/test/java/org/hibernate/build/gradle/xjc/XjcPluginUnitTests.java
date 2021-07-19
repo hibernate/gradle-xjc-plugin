@@ -6,6 +6,8 @@ import org.gradle.testfixtures.ProjectBuilder;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 /**
  * @author Steve Ebersole
  */
@@ -21,11 +23,17 @@ public class XjcPluginUnitTests {
 		xjcExtension.getSchemas().create( "schema1" );
 		xjcExtension.getSchemas().create( "schema2" );
 
-		final XjcTask xjcSchema1 = (XjcTask) project.getTasks().getByName( "xjcSchema1" );
-		xjcSchema1.getOutputDirectory().set( project.file( "path/to/output/schema1" ) );
-		xjcSchema1.getXsdFile().set( project.file( "path/to/schema1.xsd" ) );
-		xjcSchema1.getXjcBindingFile().set( project.file( "path/to/schema1.xjc" ) );
+		final XjcTask xjcSchema1Task = (XjcTask) project.getTasks().getByName( "xjcSchema1" );
+		assertThat( xjcSchema1Task ).isNotNull();
 
-		project.getTasks().getByName( "xjcSchema2" );
+		assertThat( xjcSchema1Task.getOutputDirectory().get().getAsFile().getAbsolutePath() ).endsWith( "generated-src/xjc/main/schema1" );
+
+		xjcSchema1Task.getOutputDirectory().set( project.file( "path/to/output" ) );
+		xjcSchema1Task.getXsdFile().set( project.file( "path/to/schema1.xsd" ) );
+		xjcSchema1Task.getXjcBindingFile().set( project.file( "path/to/schema1.xjc" ) );
+
+		final XjcTask xjcSchema2Task = (XjcTask) project.getTasks().getByName( "xjcSchema2" );
+		assertThat( xjcSchema2Task ).isNotNull();
+		assertThat( xjcSchema2Task.getOutputDirectory().get().getAsFile().getAbsolutePath() ).endsWith( "generated-src/xjc/main/schema2" );
 	}
 }

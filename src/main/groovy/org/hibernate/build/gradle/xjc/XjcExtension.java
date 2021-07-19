@@ -23,19 +23,14 @@ public class XjcExtension {
 	private final DirectoryProperty outputDirectory;
 	private final NamedDomainObjectContainer<SchemaDescriptor> schemas;
 
-	private final Property<String> jaxbVersion;
-
 	@Inject
 	public XjcExtension(final Project project) {
 		outputDirectory = project.getObjects().directoryProperty();
-		outputDirectory.convention( project.getLayout().getBuildDirectory().dir( "/generated-src/xjc/main" ) );
+		outputDirectory.convention( project.getLayout().getBuildDirectory().dir( "generated-src/xjc/main" ) );
 
 		// Create a dynamic container for SchemaDescriptor definitions by the user.
 		// 		- for each "compilation" they define, create a Task to perform the "compilation"
 		schemas = project.container( SchemaDescriptor.class, new SchemaDescriptorFactory( this, project ) );
-
-		jaxbVersion = project.getObjects().property( String.class );
-		jaxbVersion.convention( "2.0" );
 	}
 
 	@OutputDirectory
@@ -51,10 +46,5 @@ public class XjcExtension {
 	@SuppressWarnings("unused")
 	public final NamedDomainObjectContainer<SchemaDescriptor> getSchemas() {
 		return schemas;
-	}
-
-	@SuppressWarnings("unused")
-	public Property<String> getJaxbVersion() {
-		return jaxbVersion;
 	}
 }
