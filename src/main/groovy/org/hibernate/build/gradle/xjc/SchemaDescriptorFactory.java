@@ -6,8 +6,9 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 
 /**
- * Used to inject the "domain object name" and project into the SchemaDescriptor as it is
- * created so that it can set some sensible defaults values
+ * Used as the factory for instances added to the {@link XjcExtension#getSchemas()} container.
+ *
+ * For each schema descriptor, an xjc task is created and wired up
  *
  * @author Steve Ebersole
  */
@@ -24,10 +25,12 @@ public class SchemaDescriptorFactory implements NamedDomainObjectFactory<SchemaD
 	public SchemaDescriptor create(String name) {
 		final SchemaDescriptor schemaDescriptor = new SchemaDescriptor( name, project );
 
-		final XjcTask xjcTask = project.getTasks().create(
-				determineXjcTaskName( schemaDescriptor ), XjcTask.class, schemaDescriptor, xjcExtension, project
-		);
+		final XjcTask xjcTask = project.getTasks().create( determineXjcTaskName( schemaDescriptor ), XjcTask.class );
+		xjcTask.getXsdFile().set( schemaDescriptor.getXsdFile() );
+		xjcTask.getXjcBindingFile().set( schemaDescriptor.getXjcBindingFile() );
+		xjcTask.getXjcExtensions().set( schemaDescriptor.getXjcExtensions() );
 		xjcTask.getOutputDirectory().convention( xjcExtension.getOutputDirectory().dir( name ) );
+		xjcTask.getJaxbVersion().set( xjcExtension.getJaxbVersion() );
 
 		final SourceSet mainSourceSet = project.getConvention()
 				.getPlugin( JavaPluginConvention.class )

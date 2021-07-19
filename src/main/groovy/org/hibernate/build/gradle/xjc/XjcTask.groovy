@@ -1,53 +1,62 @@
 package org.hibernate.build.gradle.xjc
 
-import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
-import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
-
 
 /**
  * @author Steve Ebersole
  */
 @CacheableTask
-class XjcTask extends DefaultTask {
-    private final SchemaDescriptor schemaDescriptor
+abstract class XjcTask extends DefaultTask {
     private final DirectoryProperty outputDirectory
 
-    @Inject
-    XjcTask(SchemaDescriptor schemaDescriptor, XjcExtension xjcExtension, Project project) {
-        this.schemaDescriptor = schemaDescriptor
+    private final RegularFileProperty xsdFile
+    private final RegularFileProperty xjcBindingFile
+    private final SetProperty<String> xjcExtensions
 
-        outputDirectory = project.getObjects().directoryProperty()
-        outputDirectory.convention( xjcExtension.getOutputDirectory().dir( schemaDescriptor.getName() ) )
+    private final Property<String> jaxbVersion
+
+    XjcTask() {
+        xsdFile = project.getObjects().fileProperty()
+        xjcBindingFile = project.getObjects().fileProperty()
+        xjcExtensions = project.objects.setProperty( String.class )
+
+        outputDirectory = project.objects.directoryProperty()
+
+        jaxbVersion = project.objects.property( String.class )
     }
 
     @InputFile
     @PathSensitive( PathSensitivity.RELATIVE )
     RegularFileProperty getXsdFile() {
-        return schemaDescriptor.getXsdFile()
+        return xsdFile
     }
 
     @InputFile
     @PathSensitive( PathSensitivity.RELATIVE )
     RegularFileProperty getXjcBindingFile() {
-        return schemaDescriptor.getXjcBindingFile()
+        return xjcBindingFile
     }
 
     @Input
-    Set<String> getXjcExtensions() {
-        return schemaDescriptor.getXjcExtensions()
+    SetProperty<String> getXjcExtensions() {
+        return xjcExtensions
+    }
+
+    @Input
+    Property<String> getJaxbVersion() {
+        return jaxbVersion
     }
 
     @OutputDirectory
@@ -59,14 +68,14 @@ class XjcTask extends DefaultTask {
     void generateJaxbBindings() {
         project.ant.xjc(
                 destdir: outputDirectory.get().asFile.absolutePath,
-                binding: schemaDescriptor.xjcBindingFile.get().asFile.absolutePath,
-                schema: schemaDescriptor.xsdFile.get().asFile.absolutePath,
-                target: schemaDescriptor.jaxbVersion,
+                binding: xjcBindingFile.get().asFile.absolutePath,
+                schema: xsdFile.get().asFile.absolutePath,
+                target: jaxbVersion,
                 extension: 'true') {
             arg line: '-no-header'
             arg line: '-npa'
-            if ( !schemaDescriptor.xjcExtensions.empty ) {
-                arg line: schemaDescriptor.xjcExtensions.collect { "-X${it}" }.join( " " )
+            if ( !xjcExtensions.empty ) {
+                arg line: xjcExtensions.collect { "-X${it}" }.join( " " )
             }
         }
     }
