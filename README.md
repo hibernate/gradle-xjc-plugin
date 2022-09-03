@@ -30,9 +30,9 @@ slf4j, so we pass the version of slf4j used by the running Gradle.  However, all
 the Ant task need to be defined here.  E.g.:
 
     dependencies {
-        xjc 'org.glassfish.jaxb:jaxb-xjc:2.2.11'
-        xjc 'org.jvnet.jaxb2_commons:jaxb2-basics:0.9.3'
-        xjc 'org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.9.3'
+        xjc 'org.glassfish.jaxb:jaxb-xjc:2.3.6'
+        xjc 'org.jvnet.jaxb2_commons:jaxb2-basics:0.13.1'
+        xjc 'org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.13.1'
     }
 
 The plugin also adds an extension for configuring its processing.
