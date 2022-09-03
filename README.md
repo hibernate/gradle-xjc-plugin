@@ -26,7 +26,7 @@ where `<version>` is the version you want to use.
 This plugin uses the XJC Ant task (ultimately I'd like to get away from the Ant usage).  You need to tell it the dependencies needed
 for loading that Ant task.  The plugin adds a configuration named `xjc` where you can add the needed dependencies.
 The plugin does automatically add `gradleApi()` as a xjc dependency because the newer jvnet tasks seem to rely on
-slf4j, so we pass the version of slf4j used by the running Gradle.  However, all (other) dependencies needed for the
+slf4j, so we pass the version of slf4j used by the running Gradle.  However, all (other) dependencies needed for
 the Ant task need to be defined here.  E.g.:
 
     dependencies {
@@ -45,10 +45,10 @@ under this directory).  You can instruct the plugin to use a different directory
     }
 
 The plugin makes use of a Gradle feature called a `NamedDomainObjectContainer`.  Basically, it allows dynamic
-extension of the DSL for in an `a posteriori` manner.  For what its worth, this is how many things in Gradle itself
+extension of the DSL in an `a posteriori` manner.  For what it's worth, this is how many things in Gradle itself
 (like Configurations, SourceSets, etc) work.  The plugin defines a `schemas` NamedDomainObjectContainer under the xjc
 extension.  The type of the domain objects in this container (of type `org.hibernate.build.gradle.xjc.SchemaDescriptor`)
-describe the processing for a particular XSD.  Let see an example:
+describe the processing for a particular XSD.  Let's see an example:
 
     xjc {
         ...
