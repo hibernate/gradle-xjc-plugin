@@ -26,11 +26,11 @@ class XjcPlugin implements Plugin<Project> {
 		final Configuration configuration = project.configurations.maybeCreate( "xjc" )
 		configuration.setDescription( "Dependencies for running xjc (JAXB class generation)" )
 		configuration.defaultDependencies {dependencies ->
-			dependencies.add( project.getDependencies().create( "org.glassfish.jaxb:jaxb-runtime:3.0.0" ) )
-			dependencies.add( project.getDependencies().create( "org.glassfish.jaxb:jaxb-xjc:3.0.0" ) )
-			dependencies.add( project.getDependencies().create( "org.jvnet.jaxb2_commons:jaxb2-basics:0.12.0" ) )
-			dependencies.add( project.getDependencies().create( "org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.12.0" ) )
-			dependencies.add( project.getDependencies().create( "javax.activation:javax.activation-api:1.2.0" ) )
+			dependencies.add( project.getDependencies().create( "org.glassfish.jaxb:jaxb-runtime:4.0.0" ) )
+			dependencies.add( project.getDependencies().create( "org.glassfish.jaxb:jaxb-xjc:4.0.0" ) )
+			dependencies.add( project.getDependencies().create( "jakarta.xml.bind:jakarta.xml.bind-api:4.0.0" ) )
+			dependencies.add( project.getDependencies().create( "jakarta.activation:jakarta.activation-api:2.1.0" ) )
+			dependencies.add( project.getDependencies().create( "org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.13.1" ) )
 			dependencies.add( project.getDependencies().gradleApi() )
 		}
 
